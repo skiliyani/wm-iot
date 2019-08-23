@@ -30,11 +30,16 @@ client.on('message', (topic, message) => {
 			 
 			 let query = mysql.format('INSERT INTO ?? (??) VALUES (?)',["water_level_log", "value", message]);
 			 connection.query(query, function (error, results, fields) {
-				 connection.query('select ROUND(avg(value)) as avg_level from (select value from water_level_log where value > 0 order by time desc limit 10) recent', function(error, results, fields) {
+				 connection.query('select MAX(time) as max_time,ROUND(avg(value)) as avg_level from (select time,value from water_level_log where value > 0 order by time desc limit 10) recent', function(error, results, fields) {
 					 connection.release();
 					 if(error) throw error;
 					 
-					 client.publish('home/water/level', String(results[0].avg_level));
+					 let msg = new Object();
+					 msg.value = results[0].avg_level;
+					 msg.time = results[0].max_time;
+					 msg.unit = 'cm';
+					 
+					 client.publish('home/water/level', JSON.stringify(msg));
 				 });
 				 if (error) throw error;
 			 });
