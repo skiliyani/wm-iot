@@ -30,7 +30,12 @@ client.on('message', (topic, message) => {
 			 
 			 let query = mysql.format('INSERT INTO ?? (??) VALUES (?)',["water_level_log", "value", message]);
 			 connection.query(query, function (error, results, fields) {
-				 connection.release();
+				 connection.query('select ROUND(avg(value)) as avg_level from (select value from water_level_log where value > 0 order by time desc limit 10) recent', function(error, results, fields) {
+					 connection.release();
+					 if(error) throw error;
+					 
+					 client.publish('home/water/level', String(results[0].avg_level));
+				 });
 				 if (error) throw error;
 			 });
 			 
