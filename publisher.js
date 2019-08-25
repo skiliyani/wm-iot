@@ -4,6 +4,9 @@ const timeago = require('time-ago');
 const mqtt = require('mqtt');
 const client = mqtt.connect('mqtt://192.168.8.10');
 
+const minValue = 13;
+const maxValue = 77;
+
 var pool  = mysql.createPool({
 	  connectionLimit : 10,
 	  host            : '192.168.8.10',
@@ -23,9 +26,13 @@ var j = schedule.scheduleJob('*/1 * * * *', function(){
 				 connection.release();
 				 if(error) throw error;
 				 
-				 let msg = results[0].avg_level + "," +  timeago.ago(results[0].max_time);
-//				 msg.value = results[0].avg_level;
-//				 msg.when = timeago.ago(results[0].max_time);
+				 let currentValue = results[0].avg_level;
+				 let timeAgo = timeago.ago(results[0].max_time);
+				 
+				 let levelPercentage = (currentValue - minValue)/(maxValue - minValue) * 100;
+				 let waterRemaining = 100 - Math.round(levelPercentage);		 
+				 				 
+				 let msg = waterRemaining + "," +  timeAgo;
 				 
 				 console.log('Publish: ' + msg);
 				 client.publish('home/water/level', msg);
