@@ -1,18 +1,19 @@
+const config = require('config');
 const schedule = require('node-schedule');
 const mysql = require('mysql');
 const timeago = require('time-ago');
 const mqtt = require('mqtt');
-const client = mqtt.connect('mqtt://192.168.8.10');
+const client = mqtt.connect('mqtt://' + config.get('mqtt.broker'));
 
 const minValue = 13;
 const maxValue = 77;
 
 var pool  = mysql.createPool({
 	  connectionLimit : 10,
-	  host            : '192.168.8.10',
-	  user            : 'pi',
-	  password        : 'raspberry',
-	  database        : 'iot',
+	  host            : config.get('mysql.host'),
+	  user            : config.get('mysql.user'),
+	  password        : config.get('mysql.password'),
+	  database        : config.get('mysql.database'),
 	  connectTimeout  : 60 * 60 * 1000,
 	  acquireTimeout  : 60 * 60 * 1000,
 	  timeout         : 60 * 60 * 1000

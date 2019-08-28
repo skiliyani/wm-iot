@@ -1,0 +1,11 @@
+{
+	"mysql": {
+		"host": "127.0.0.1",
+		"user": "pi",
+		"password": "raspberry",
+		"database": "iot"
+	},
+	"mqtt": {
+		"broker": "127.0.0.1"
+	}
+}
