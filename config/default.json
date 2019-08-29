@@ -6,6 +6,6 @@
 		"database": "iot"
 	},
 	"mqtt": {
-		"broker": "192.168.8.10"
+		"broker": "127.0.0.1"
 	}
 }
