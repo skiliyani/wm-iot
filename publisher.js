@@ -23,7 +23,7 @@ var j = schedule.scheduleJob('*/1 * * * *', function(){
 	pool.getConnection(function(err, connection) {
 		 if (err) throw err; // not connected!
 
-		 connection.query('select MAX(time) as max_time,ROUND(avg(value)) as avg_level from (select time,value from water_level_log where value > 0 order by time desc limit 10) recent', function(error, results, fields) {
+		 connection.query('select MAX(time) as max_time,ROUND(avg(value)) as avg_level from (select time,value from water_level_log where value > 0 order by time desc limit 1) recent', function(error, results, fields) {
 				 connection.release();
 				 if(error) throw error;
 				 
