@@ -5,7 +5,7 @@ const timeago = require('time-ago');
 const mqtt = require('mqtt');
 const client = mqtt.connect('mqtt://' + config.get('mqtt.broker'));
 
-const minValue = 13;
+const minValue = 14;
 const maxValue = 77;
 
 var pool  = mysql.createPool({
